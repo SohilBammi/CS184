@@ -1,0 +1,8 @@
+﻿  example_00.cpp
+  Generating code
+  2 of 8 functions (25.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  example_00.vcxproj -> C:\Users\Sohil Bammi\School\CS184\As0\example_00\example_00\Release\example_00.exe
+  example_00.vcxproj -> C:\Users\Sohil Bammi\School\CS184\As0\example_00\example_00\Release\example_00.pdb (Full PDB)
