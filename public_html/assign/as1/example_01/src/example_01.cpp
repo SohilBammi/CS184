@@ -44,6 +44,13 @@ GLfloat dlXYZRGB2[6] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat dlXYZRGB3[6] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat dlXYZRGB4[6] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat dlXYZRGB5[6] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+GLfloat half-angle[3] = {0.0f, 0.0f, 0.0f};
+GLfloat fullTerm[3] = {0.0f, 0.0f, 0.0f};
+GLfloat lightVec2[3] = {lightVec[0], lightVec[1], lightVec[2]};
+GLfloat fullFirstTerm = 0;
+GLfloat nhTotal = 0;
+GLfloat fres = 0;
+
 
 inline float sqr(float x) { return x*x; }
 
@@ -128,6 +135,57 @@ void vecMultiplyCon(GLfloat vec[], GLfloat constant, GLfloat ret[]){
 			ret[i] = 0;
 		}
 	}
+}
+
+//****************************************************
+// first term calc in Shirley calc
+//****************************************************
+void firstTerm(GLfloat spuPU, GLfloat spvPV) {
+	GLfloat numerator = sqrt((spuPU+1)*(spvPV+1));
+	GLfloat fullFirstTerm = numerator/(8*PI);
+}
+
+//****************************************************
+// calculating half-angle
+//****************************************************
+void halfAngler(GLfloat lightVec[], GLfloat viewVec[]) {
+	GLfloat numerator1st[3] = {lightVec[0], lightVec[1], lightVec[2]};
+	vecAdd(numerator1st[], viewVec[], sumVec[]);
+	GLfloat denom = magnitudeVec(sumVec[]);
+	GLfloat fullTerm[0] = (sumVec[0]/denom);
+	GLfloat fullTerm[1] = (sumVec[1]/denom);
+	GLfloat fullTerm[2] = (sumVec[2]/denom);
+	//fullterm is the array that reps the half vector
+}
+
+//****************************************************
+// spu and spv exponent 
+//****************************************************
+void nhPower(GLfloat spuPU, GLfloat fullTerm[], GLfloat u[], GLfloat v[], GLfloat normVec[], GLfloat viewVec[]) {
+	GLfloat term1 = spuPU*((dotProduct(fullTerm[], u[]))*(dotProduct(fullTerm[], u[])));
+	GLfloat term2 = spuPU*((dotProduct(fullTerm[], v[]))*(dotProduct(fullTerm[], v[])));
+	GLfloat term3 = 1 - (dotProduct(fullTerm[], normVec[])*dotProduct(fullTerm[], normVec[]));
+
+	GLfloat nhTotal = (term1 + term2) / term3;
+}
+
+//****************************************************
+// fresnel calculation
+//****************************************************
+void frescalc(GLfloat fullTerm[], GLfloat spP, GLfloat viewVec[]) {
+	GLfloat term1 = (1 - spP);
+	GLfloat term2 = pow((1-(dotProduct(fullTerm[], viewVec[]))), 5);
+
+	GLfloat fres = spP + (term1*term2);
+}
+
+void anisoSpecCalc(GLfloat fullFirstTerm, GLfloat normVec[], GLfloat fullTerm[], GLfloat nhTotal, GLfloat fres) {
+	GLfloat numerator = fullFirstTerm * pow(dotProduct(normVec[], fullTerm[]), nhTotal) * fres;
+	GLfloat max1 = dotProduct(normVec[], viewVec[]);
+	GLfloat max2 = dotProduct(normVec[], lightVec2[]);
+	GLfloat denom = dotProduct(fullTerm[], viewVec[]) * max(max1, max2);
+
+	GLfloat total = numerator/denom;
 }
 
 //****************************************************
