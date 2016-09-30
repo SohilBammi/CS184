@@ -394,46 +394,66 @@ void calcPixelShade(GLfloat xcord, GLfloat ycord, GLfloat zcord, GLfloat viewVec
 	//cout << "View Vector: {" << viewVec[0] << ", " << viewVec[1] << ", " << viewVec[2] << "}" << endl;
 	GLfloat *pixelInt = (GLfloat*) malloc(3);
 	GLfloat *pixelInt1 = (GLfloat*) malloc(3);
-	cout << "----------PL1----------" << endl;
-	computeLightShadePointL(norVec, viewVec, plXYZRGB1, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	//cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------PL2----------" << endl;
-	computeLightShadePointL(norVec, viewVec, plXYZRGB2, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------PL3----------" << endl;
-	computeLightShadePointL(norVec, viewVec, plXYZRGB3, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------PL4----------" << endl;
-	computeLightShadePointL(norVec, viewVec, plXYZRGB4, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------PL5----------" << endl;
-	computeLightShadePointL(norVec, viewVec, plXYZRGB5, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	//cout << "----------DL1----------" << endl;
-	computeLightShadeDirL(norVec, viewVec, dlXYZRGB1, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	//cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	//cout << "pixelInt: {" << pixelInt[0] << ", " << pixelInt[1] << ", " << pixelInt[2] << "}" << endl;
-	cout << "----------DL2----------" << endl;
-	computeLightShadeDirL(norVec, viewVec, dlXYZRGB2, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------DL3----------" << endl;
-	computeLightShadeDirL(norVec, viewVec, dlXYZRGB3, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------DL4----------" << endl;
-	computeLightShadeDirL(norVec, viewVec, dlXYZRGB4, pixelInt);
-	vecAdd(ret, pixelInt, ret);
-	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
-	cout << "----------DL5----------" << endl;
-	computeLightShadeDirL(norVec, viewVec, dlXYZRGB5, pixelInt);
-	vecAdd(ret, pixelInt, ret);
+	if(numPl > 0){
+		cout << "----------PL1----------" << endl;
+		computeLightShadePointL(norVec, viewVec, plXYZRGB1, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		//cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numPl > 1){
+		cout << "----------PL2----------" << endl;
+		computeLightShadePointL(norVec, viewVec, plXYZRGB2, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numPl > 2){
+		cout << "----------PL3----------" << endl;
+		computeLightShadePointL(norVec, viewVec, plXYZRGB3, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numPl > 3){
+		cout << "----------PL4----------" << endl;
+		computeLightShadePointL(norVec, viewVec, plXYZRGB4, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numPl > 4){
+		cout << "----------PL5----------" << endl;
+		computeLightShadePointL(norVec, viewVec, plXYZRGB5, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numDl > 0){
+		cout << "----------DL1----------" << endl;
+		computeLightShadeDirL(norVec, viewVec, dlXYZRGB1, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numDl > 1){
+		cout << "----------DL2----------" << endl;
+		computeLightShadeDirL(norVec, viewVec, dlXYZRGB2, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numDl > 2){
+		cout << "----------DL3----------" << endl;
+		computeLightShadeDirL(norVec, viewVec, dlXYZRGB3, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numDl > 3){
+		cout << "----------DL4----------" << endl;
+		computeLightShadeDirL(norVec, viewVec, dlXYZRGB4, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
+	if(numDl > 4){
+		cout << "----------DL5----------" << endl;
+		computeLightShadeDirL(norVec, viewVec, dlXYZRGB5, pixelInt);
+		vecAdd(ret, pixelInt, ret);
+		cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
+	}
 	vecAdd(ret, kaRGB, pixelRGB);
 	cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
 	free(pixelInt);
