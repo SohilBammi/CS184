@@ -316,16 +316,9 @@ void commandLine(int argc, char *argv[]) {
     }
 }
 
-void computeLightShadePointL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightVec[], GLfloat pixelInt[]){
-	GLfloat lightXYZ[3] = {lightVec[0], lightVec[1], lightVec[2]};
-	//cout << "LXYZ: {" << lightXYZ[0] << ", " << lightXYZ[1] << ", " << lightXYZ[2] << "}" << endl;
-	GLfloat lightRGB[3] = {lightVec[3], lightVec[4], lightVec[5]};
-	GLfloat *lightIntVec = (GLfloat*) malloc(3);
-	vecSubtract(lightXYZ, norVec, lightIntVec);
-	//cout << "LVec: {" << lightIntVec[0] << ", " << lightIntVec[1] << ", " << lightIntVec[2] << "}" << endl;
+void computeLightShade(GLfloat norVec[], GLfloat viewVec[], GLfloat lightXYZ[], GLfloat lightRGB[], GLfloat pixelInt[], GLfloat lightIntVec[]){
 	GLfloat *lightIntVecNorm = (GLfloat*) malloc(3);
 	normalizeVec(lightIntVec, lightIntVecNorm);
-	free(lightIntVec);
 	//cout << "LVecNorm: {" << lightIntVecNorm[0] << ", " << lightIntVecNorm[1] << ", " << lightIntVecNorm[2] << "}" << endl;
 	GLfloat *kdLightVec = (GLfloat*) malloc(3);
 	vecMultiplyCon(kdRGB, maxVZero(dotProduct(lightIntVecNorm, norVec)), kdLightVec);
@@ -360,6 +353,18 @@ void computeLightShadePointL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightV
 	free(kskdRGBVec);
 }
 
+void computeLightShadePointL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightVec[], GLfloat pixelInt[]){
+	GLfloat lightXYZ[3] = {lightVec[0], lightVec[1], lightVec[2]};
+	//cout << "LXYZ: {" << lightXYZ[0] << ", " << lightXYZ[1] << ", " << lightXYZ[2] << "}" << endl;
+	GLfloat lightRGB[3] = {lightVec[3], lightVec[4], lightVec[5]};
+	//cout << "LRGB: {" << lightRGB[0] << ", " << lightRGB[1] << ", " << lightRGB[2] << "}" << endl;
+	GLfloat *lightIntVec = (GLfloat*) malloc(3);
+	vecSubtract(lightXYZ, norVec, lightIntVec);
+	//cout << "LVec: {" << lightIntVec[0] << ", " << lightIntVec[1] << ", " << lightIntVec[2] << "}" << endl;
+	computeLightShade(norVec, viewVec, lightXYZ, lightRGB, pixelInt, lightIntVec);
+	free(lightIntVec);
+}
+
 void computeLightShadeDirL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightVec[], GLfloat pixelInt[]){
 	GLfloat lightXYZ[3] = {lightVec[0], lightVec[1], lightVec[2]};
 	//cout << "LXYZ: {" << lightXYZ[0] << ", " << lightXYZ[1] << ", " << lightXYZ[2] << "}" << endl;
@@ -369,42 +374,10 @@ void computeLightShadeDirL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightVec
 	GLfloat *lightIntVec = (GLfloat*) malloc(3);
 	vecMultiplyCon(lightXYZ, reverseCon, lightIntVec);
 	//cout << "LVec: {" << lightIntVec[0] << ", " << lightIntVec[1] << ", " << lightIntVec[2] << "}" << endl;
-	GLfloat *lightIntVecNorm = (GLfloat*) malloc(3);
-	normalizeVec(lightIntVec, lightIntVecNorm);
+	computeLightShade(norVec, viewVec, lightXYZ, lightRGB, pixelInt, lightIntVec);
 	free(lightIntVec);
-	//cout << "LVecNorm: {" << lightIntVecNorm[0] << ", " << lightIntVecNorm[1] << ", " << lightIntVecNorm[2] << "}" << endl;
-	GLfloat *kdLightVec = (GLfloat*) malloc(3);
-	vecMultiplyCon(kdRGB, maxVZero(dotProduct(lightIntVecNorm, norVec)), kdLightVec);
-	//cout << "kdLightVec: {" << kdLightVec[0] << ", " << kdLightVec[1] << ", " << kdLightVec[2] << "}" << endl;
-	GLfloat specCon = 2.0f;
-	GLfloat difCon = -1.0f;
-	GLfloat *rVec = (GLfloat*) malloc(3);
-	GLfloat *rVecTerm2 = (GLfloat*) malloc(3);
-	GLfloat *rVecTerm1 = (GLfloat*) malloc(3);
-	vecMultiplyCon(norVec, specCon * dotProduct(lightIntVecNorm, norVec),  rVecTerm2);
-	vecMultiplyCon(lightIntVecNorm, difCon, rVecTerm1);
-	free(lightIntVecNorm);
-	vecAdd(rVecTerm1, rVecTerm2, rVec);
-	free(rVecTerm1);
-	free(rVecTerm2);
-	//cout << "rVec: {" << rVec[0] << ", " << rVec[1] << ", " << rVec[2] << "}" << endl;
-	GLfloat *ksLightVec = (GLfloat*) malloc(3);
-	GLfloat baseFloat = maxVZero(dotProduct(rVec, viewVec));
-	GLfloat exponFloat = pow(baseFloat, spP);
-	vecMultiplyCon(ksRGB, exponFloat, ksLightVec);
-	free(rVec);
-	//cout << "ksLightVec: {" << ksLightVec[0] << ", " << ksLightVec[1] << ", " << ksLightVec[2] << "}" << endl;
-	GLfloat *kskdVec = (GLfloat*) malloc(3);
-	vecAdd(kdLightVec, ksLightVec, kskdVec);
-	free(kdLightVec);
-	free(ksLightVec);
-	GLfloat *kskdRGBVec = (GLfloat*) malloc(3);
-	vecMultiply(lightRGB, kskdVec, kskdRGBVec);
-	vecMultiply(lightRGB, kskdVec, pixelInt);
-	free(kskdVec);
-	//cout << "kskdRGBVec: {" << kskdRGBVec[0] << ", " << kskdRGBVec[1] << ", " << kskdRGBVec[2] << "}" << endl;
-	free(kskdRGBVec);
 }
+
 
 //Module - Calculate Pixel Shade
 void calcPixelShade(GLfloat xcord, GLfloat ycord, GLfloat zcord, GLfloat viewVecPos[],  GLfloat pixelRGB[]){
@@ -421,7 +394,7 @@ void calcPixelShade(GLfloat xcord, GLfloat ycord, GLfloat zcord, GLfloat viewVec
 	//cout << "View Vector: {" << viewVec[0] << ", " << viewVec[1] << ", " << viewVec[2] << "}" << endl;
 	GLfloat *pixelInt = (GLfloat*) malloc(3);
 	GLfloat *pixelInt1 = (GLfloat*) malloc(3);
-	//cout << "----------PL1----------" << endl;
+	cout << "----------PL1----------" << endl;
 	computeLightShadePointL(norVec, viewVec, plXYZRGB1, pixelInt);
 	vecAdd(ret, pixelInt, ret);
 	//cout << "ret: {" << ret[0] << ", " << ret[1] << ", " << ret[2] << "}" << endl;
