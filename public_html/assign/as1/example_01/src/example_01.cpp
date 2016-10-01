@@ -29,6 +29,7 @@ int Height_global = 400;
 GLfloat kaRGB[3] = {0.0f, 0.0f, 0.0f};
 GLfloat kdRGB[3] = {0.0f, 0.0f, 0.0f};
 GLfloat ksRGB[3] = {0.0f, 0.0f, 0.0f};
+bool specSet = false;
 GLfloat spuPU = 0;
 GLfloat spvPV = 0;
 GLfloat spP = 0;
@@ -137,66 +138,6 @@ void vecMultiplyCon(GLfloat vec[], GLfloat constant, GLfloat ret[]){
 	}
 }
 
-// //****************************************************
-// // first term calc in Shirley calc
-// //****************************************************
-// void firstTerm(GLfloat spuPU, GLfloat spvPV) {
-// 	GLfloat numerator = sqrt((spuPU+1)*(spvPV+1));
-// 	GLfloat fullFirstTerm = numerator/(8*PI);
-// }
-
-// //****************************************************
-// // getting u and v
-// //****************************************************
-// void vcalc(GLfloat yvec[], GLfloat normVec[]) {
-// 	vVec = normalize(yvec[] - (normVec*(normVec[1])));
-// }
-
-// void ucalc()
-
-// //****************************************************
-// // calculating half-angle
-// //****************************************************
-// void halfAngler(GLfloat lightVec[], GLfloat viewVec[]) {
-// 	GLfloat numerator1st[3] = {lightVec[0], lightVec[1], lightVec[2]};
-// 	vecAdd(numerator1st[], viewVec[], sumVec[]);
-// 	GLfloat denom = magnitudeVec(sumVec[]);
-// 	GLfloat fullTerm[0] = (sumVec[0]/denom);
-// 	GLfloat fullTerm[1] = (sumVec[1]/denom);
-// 	GLfloat fullTerm[2] = (sumVec[2]/denom);
-// 	//fullterm is the array that reps the half vector
-// }
-
-// //****************************************************
-// // spu and spv exponent 
-// //****************************************************
-// void nhPower(GLfloat spuPU, GLfloat fullTerm[], GLfloat u[], GLfloat v[], GLfloat normVec[], GLfloat viewVec[]) {
-// 	GLfloat term1 = spuPU*((dotProduct(fullTerm[], u[]))*(dotProduct(fullTerm[], u[])));
-// 	GLfloat term2 = spuPU*((dotProduct(fullTerm[], v[]))*(dotProduct(fullTerm[], v[])));
-// 	GLfloat term3 = 1 - (dotProduct(fullTerm[], normVec[])*dotProduct(fullTerm[], normVec[]));
-
-// 	GLfloat nhTotal = (term1 + term2) / term3;
-// }
-
-// //****************************************************
-// // fresnel calculation
-// //****************************************************
-// void frescalc(GLfloat fullTerm[], GLfloat spP, GLfloat viewVec[]) {
-// 	GLfloat term1 = (1 - spP);
-// 	GLfloat term2 = pow((1-(dotProduct(fullTerm[], viewVec[]))), 5);
-
-// 	GLfloat fres = spP + (term1*term2);
-// }
-
-// void anisoSpecCalc(GLfloat fullFirstTerm, GLfloat normVec[], GLfloat fullTerm[], GLfloat nhTotal, GLfloat fres) {
-// 	GLfloat numerator = fullFirstTerm * pow(dotProduct(normVec[], fullTerm[]), nhTotal) * fres;
-// 	GLfloat max1 = dotProduct(normVec[], viewVec[]);
-// 	GLfloat max2 = dotProduct(normVec[], lightVec2[]);
-// 	GLfloat denom = dotProduct(fullTerm[], viewVec[]) * max(max1, max2);
-
-// 	GLfloat total = numerator/denom;
-// }
-
 //****************************************************
 // vector add
 //****************************************************
@@ -246,6 +187,15 @@ GLfloat dotProduct(GLfloat vec1[], GLfloat vec2[]){
 }
 
 //****************************************************
+// crossProduct Function
+//****************************************************
+void crossProduct(GLfloat vec1[], GLfloat vec2[], GLfloat ret[]){
+	ret[0] = (vec1[1] * vec2[2]) - (vec1[2] * vec2[1]);
+	ret[1] = (vec1[2] * vec2[0]) - (vec1[0] * vec2[2]);
+	ret[2] = (vec1[0] * vec2[1]) - (vec1[1] * vec2[0]);
+}
+
+//****************************************************
 // maxVZero Function
 //****************************************************
 GLfloat maxVZero(GLfloat num){
@@ -255,6 +205,77 @@ GLfloat maxVZero(GLfloat num){
 	else{
 		return (GLfloat) 0.0f;
 	}
+}
+
+//****************************************************
+// first term calc in Shirley calc
+//****************************************************
+GLfloat calcFirstTerm(GLfloat spuPU, GLfloat spvPV) {
+	GLfloat numerator = sqrt((spuPU+1)*(spvPV+1));
+	return numerator/(8*PI);
+}
+
+//****************************************************
+// getting u and v
+//****************************************************
+void calcV(GLfloat yVec[], GLfloat normVec[], GLfloat ret[]) {
+	GLfloat *term2 = (GLfloat*) malloc(3);
+	vecMultiplyCon(normVec, dotProduct(normVec, yVec), term2);
+	GLfloat *retTerm = (GLfloat*) malloc(3);
+	vecSubtract(yVec, term2, retTerm);
+	free(term2);
+	normalizeVec(retTerm, ret);
+	free(retTerm);
+}
+
+void calcU(GLfloat vVec[], GLfloat normVec[], GLfloat ret[]) {
+	GLfloat *retRaw = (GLfloat*) malloc(3);
+	crossProduct(vVec, normVec, retRaw);
+	normalizeVec(retRaw, ret);
+}
+
+
+
+//****************************************************
+// calculating half-angle
+//****************************************************
+void calcHalfAngle(GLfloat lightVec[], GLfloat viewVec[], GLfloat ret[]) {
+	GLfloat *num = (GLfloat*) malloc(3);
+	vecAdd(lightVec, viewVec, num);
+	GLfloat mag = magnitudeVec(num);
+	vecDivideCon(num, mag, ret);
+}
+
+//****************************************************
+// spu and spv exponent 
+//****************************************************
+GLfloat calcNHPower(GLfloat spuPU, GLfloat halfAngle[], GLfloat uVal[], GLfloat vVal[], GLfloat normVec[], GLfloat viewVec[]) {
+	GLfloat term1 = spuPU*((dotProduct(halfAngle, uVal))*(dotProduct(halfAngle, uVal)));
+	GLfloat term2 = spuPU*((dotProduct(halfAngle, vVal))*(dotProduct(halfAngle, vVal)));
+	GLfloat term3 = 1 - (dotProduct(halfAngle, normVec)*dotProduct(halfAngle, normVec));
+	return (term1 + term2) / term3;
+}
+
+//****************************************************
+// fresnel calculation
+//****************************************************
+GLfloat calcFres(GLfloat halfVec[], GLfloat viewVec[], GLfloat ksCon) {
+	return ksCon + (1-ksCon)*(pow((1-(dotProduct(halfVec, viewVec))), 5));
+}
+
+GLfloat calcAnisoSpec(GLfloat firstTerm, GLfloat nhPower, GLfloat fresTerm, GLfloat halfAngle[], GLfloat normVec[], GLfloat viewVec[], GLfloat lightVec[]) {
+	cout << "Normal Vector: " << normVec[0] << " " << normVec[1] << " " << normVec[2] << endl;
+	cout << "View Vector: " << viewVec[0] << " " << viewVec[1] << " " << viewVec[2] << endl;
+	cout << "Light Vector: " << lightVec[0] << " " << lightVec[1] << " " << lightVec[2] << endl;
+	GLfloat secondTermNum = pow(dotProduct(normVec, halfAngle), nhPower);
+	cout << "nhPow: " << nhPower << endl;
+	cout << "dotProd: " << dotProduct(normVec, halfAngle) << endl;
+	cout << "dotProd: " << pow(dotProduct(normVec, halfAngle), nhPower) << endl;
+	GLfloat secondTermDenom = dotProduct(halfAngle, viewVec) * max(dotProduct(normVec, viewVec), dotProduct(normVec, lightVec));
+	cout << "Second Term Denom: " << secondTermDenom << endl;
+	GLfloat secondTerm = secondTermNum / secondTermDenom;
+	cout << "Second Term: " << secondTerm << endl;
+	return firstTerm * secondTerm * fresTerm;
 }
 
 //****************************************************
@@ -310,6 +331,7 @@ void commandLine(int argc, char *argv[]) {
 		else if(std::string(argv[i]) == "-sp"){
 			spP = (GLfloat) atof(argv[i+1]);
 			i = i + 2;
+			specSet = true;
 			cout << "-sp: " << spP << endl;
 		}
 		else if(std::string(argv[i]) == "-pl"){
@@ -383,9 +405,38 @@ void commandLine(int argc, char *argv[]) {
     }
 }
 
-void computeLightShade(GLfloat norVec[], GLfloat viewVec[], GLfloat lightXYZ[], GLfloat lightRGB[], GLfloat pixelInt[], GLfloat lightIntVec[]){
+void setAnisotropic(GLfloat lightVec[], GLfloat exViewVec[], GLfloat exNormVec[]){
+	GLfloat exPu = spuPU;
+	GLfloat exPv = spvPV;
+	GLfloat *exLightVec = (GLfloat*) malloc(3);
+	normalizeVec(lightVec, exLightVec);
+	GLfloat exYvec[3] = {0.0f, 1.0f, 0.0f};
+	GLfloat *exU= (GLfloat*) malloc(3);
+	GLfloat *exV = (GLfloat*) malloc(3);
+	GLfloat *halfVec = (GLfloat*) malloc(3);
+	GLfloat ksCon = ksRGB[0];
+	calcV(exYvec, exNormVec, exV);
+	cout << "V value: {" << exV[0] << ", " << exV[1] << ", " << exV[2] << "}" << endl;
+	calcU(exV, exNormVec, exU);
+	cout << "U value: {" << exU[0] << ", " << exU[1] << ", " << exU[2] << "}" << endl;
+	calcHalfAngle(exLightVec, exViewVec, halfVec);
+	cout << "HalfVec value: {" << halfVec[0] << ", " << halfVec[1] << ", " << halfVec[2] << "}" << endl;
+	GLfloat firstTerm = calcFirstTerm(exPu, exPv);
+	cout << "First Term: " << firstTerm << endl;
+	GLfloat nhPower = calcNHPower(exPu, halfVec, exU, exV, exNormVec, exViewVec);
+	cout << "NHPower: " << nhPower << endl;
+	GLfloat fresTerm = calcFres(halfVec, exViewVec, ksCon);
+	cout << "Fres Term: " << fresTerm << endl;
+	spP = calcAnisoSpec(firstTerm, nhPower, fresTerm, halfVec, exNormVec, exViewVec, exLightVec);
+	cout << "Aniso Spec: " << spP << endl;
+}
+
+void computeLightShade(GLfloat norVec[], GLfloat viewVec[], GLfloat lightRGB[], GLfloat pixelInt[], GLfloat lightIntVec[]){
 	GLfloat *lightIntVecNorm = (GLfloat*) malloc(3);
 	normalizeVec(lightIntVec, lightIntVecNorm);
+	if(!specSet){
+		setAnisotropic(lightIntVecNorm, viewVec, norVec);
+	}
 	//cout << "LVecNorm: {" << lightIntVecNorm[0] << ", " << lightIntVecNorm[1] << ", " << lightIntVecNorm[2] << "}" << endl;
 	GLfloat *kdLightVec = (GLfloat*) malloc(3);
 	vecMultiplyCon(kdRGB, maxVZero(dotProduct(lightIntVecNorm, norVec)), kdLightVec);
@@ -428,7 +479,7 @@ void computeLightShadePointL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightV
 	GLfloat *lightIntVec = (GLfloat*) malloc(3);
 	vecSubtract(lightXYZ, norVec, lightIntVec);
 	//cout << "LVec: {" << lightIntVec[0] << ", " << lightIntVec[1] << ", " << lightIntVec[2] << "}" << endl;
-	computeLightShade(norVec, viewVec, lightXYZ, lightRGB, pixelInt, lightIntVec);
+	computeLightShade(norVec, viewVec, lightRGB, pixelInt, lightIntVec);
 	free(lightIntVec);
 }
 
@@ -441,7 +492,7 @@ void computeLightShadeDirL(GLfloat norVec[], GLfloat viewVec[], GLfloat lightVec
 	GLfloat *lightIntVec = (GLfloat*) malloc(3);
 	vecMultiplyCon(lightXYZ, reverseCon, lightIntVec);
 	//cout << "LVec: {" << lightIntVec[0] << ", " << lightIntVec[1] << ", " << lightIntVec[2] << "}" << endl;
-	computeLightShade(norVec, viewVec, lightXYZ, lightRGB, pixelInt, lightIntVec);
+	computeLightShade(norVec, viewVec, lightRGB, pixelInt, lightIntVec);
 	free(lightIntVec);
 }
 
@@ -627,11 +678,38 @@ void size_callback(GLFWwindow* window, int width, int height)
 }
 
 
+
 //****************************************************
 // the usual stuff, nothing exciting here
 //****************************************************
 int main(int argc, char *argv[]) {
     //This initializes glfw
+/*	GLfloat exPu = 0.5f;
+	GLfloat exPv = 0.5f;
+	GLfloat exViewVec[3] = {0.0f, 0.0f, 1.0f};
+	GLfloat exLightVec[3] = {0.0f, 1.0f, 1.0f};
+	GLfloat exNormVec[3] = {0.0f, 0.0f, 1.0f};
+	GLfloat exYvec[3] = {0.0f, 1.0f, 0.0f};
+	GLfloat *exU= (GLfloat*) malloc(3);
+	GLfloat *exV = (GLfloat*) malloc(3);
+	GLfloat *halfVec = (GLfloat*) malloc(3);
+	GLfloat ksCon = ksRGB[0];
+	ksCon = 0.5f;
+	calcV(exYvec, exNormVec, exV);
+	cout << "V value: {" << exV[0] << ", " << exV[1] << ", " << exV[2] << "}" << endl;
+	calcU(exV, exNormVec, exU);
+	cout << "U value: {" << exU[0] << ", " << exU[1] << ", " << exU[2] << "}" << endl;
+	calcHalfAngle(exLightVec, exViewVec, halfVec);
+	cout << "HalfVec value: {" << halfVec[0] << ", " << halfVec[1] << ", " << halfVec[2] << "}" << endl;
+	GLfloat firstTerm = calcFirstTerm(exPu, exPv);
+	cout << "First Term: " << firstTerm << endl;
+	GLfloat nhPower = calcNHPower(exPu, halfVec, exU, exV, exNormVec, exViewVec);
+	cout << "NHPower: " << nhPower << endl;
+	GLfloat fresTerm = calcFres(halfVec, exViewVec, ksCon);
+	cout << "Fres Term: " << fresTerm << endl;
+	GLfloat anisoSpec = calcAnisoSpec(firstTerm, nhPower, fresTerm, halfVec, exNormVec, exViewVec, exLightVec);
+	cout << "Aniso Spec: " << anisoSpec << endl;*/
+
     commandLine(argc, argv);  
     initializeRendering();
     
