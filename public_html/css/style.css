@@ -39,3 +39,7 @@ h1 {
   border-radius: 50%;
   display: table-cell;
 }
+
+.project {
+  max-width:800px;
+}

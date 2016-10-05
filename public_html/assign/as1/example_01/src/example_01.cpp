@@ -414,7 +414,7 @@ void setAnisotropic(GLfloat lightVec[], GLfloat exViewVec[], GLfloat exNormVec[]
 	GLfloat *exU= (GLfloat*) malloc(3);
 	GLfloat *exV = (GLfloat*) malloc(3);
 	GLfloat *halfVec = (GLfloat*) malloc(3);
-	GLfloat ksCon = ksRGB[0];
+	GLfloat ksCon = spP;
 	calcV(exYvec, exNormVec, exV);
 	cout << "V value: {" << exV[0] << ", " << exV[1] << ", " << exV[2] << "}" << endl;
 	calcU(exV, exNormVec, exU);
