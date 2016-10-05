@@ -45,19 +45,19 @@ public class Vector {
 	    return ret;
 	}
 	
-	public Vector mulConstant(double con){
+	public Vector mulScalar(double scal){
 	    Vector ret = new Vector();
-	    ret.x = this.x * con;
-	    ret.y = this.y * con;
-	    ret.z = this.z * con;
+	    ret.x = this.x * scal;
+	    ret.y = this.y * scal;
+	    ret.z = this.z * scal;
 	    return ret;
 	}
 	
-	public Vector divConstant(double con){
+	public Vector divScalar(double scal){
 	    Vector ret = new Vector();
-	    ret.x = this.x / con;
-	    ret.y = this.y / con;
-	    ret.z = this.z / con;
+	    ret.x = this.x / scal;
+	    ret.y = this.y / scal;
+	    ret.z = this.z / scal;
 	    return ret;
 	}
 	
