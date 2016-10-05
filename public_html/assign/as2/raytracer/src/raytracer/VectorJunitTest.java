@@ -99,12 +99,4 @@ public class VectorJunitTest {
 		assertEquals(ret2.y, retActual2.y, 0.01);
 		assertEquals(ret2.z, retActual2.z, 0.01);
 	}
-	/*Vector vec1 = new Vector(2.0, 2.0, 3.0);
-    Vector vec2 = new Vector(2.0, 2.0, 1.0);
-    vec1.printVector();
-    vec2.printVector();
-    System.out.println("Dot Product: " + vec1.dotProduct(vec2));
-    Vector crossProd = vec1.crossProduct(vec2);
-    System.out.print("Cross Product: ");
-    crossProd.printVector();*/
 }
