@@ -15,7 +15,7 @@ public class Scene {
      */
     public static void main(String[] args) throws IOException {
         // TODO Auto-generated method stub
-        BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB);
         int rgb = new Color(255, 255, 255).getRGB();
         img.setRGB(120, 120, rgb);
         File f = new File("bin/MyFile.png");

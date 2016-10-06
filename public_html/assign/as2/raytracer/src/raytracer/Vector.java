@@ -17,6 +17,18 @@ public class Vector {
 	    this.z = 0;
 	}
 	
+	public double magnitude(){
+		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+	}
+	
+	public void normalize(){
+		double scal = this.x*this.x + this.y*this.y +this.z*this.z;
+		if(scal!=0) scal = 1 / Math.sqrt(scal);
+		this.x = this.x * scal;
+		this.y = this.y * scal;
+		this.z = this.z * scal;
+	}
+	
 	public double dotProduct(Vector vec){
 	    return this.x*vec.x + this.y*vec.y + this.z*vec.z;
 	}

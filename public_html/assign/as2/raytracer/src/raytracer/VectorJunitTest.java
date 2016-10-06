@@ -36,6 +36,20 @@ public class VectorJunitTest {
 	}
 	
 	@Test
+	public void Magnitude_SimplePositiveVector_Calculated() {
+		double ret = vecSimple1.magnitude();
+		assertEquals(ret, 3.742, 0.01);
+	}
+	
+	@Test
+	public void Normalize_SimplePositiveVector_Calculated() {
+		vecSimple1.normalize();
+		assertEquals(vecSimple1.x, 0.267, 0.01);
+		assertEquals(vecSimple1.y, 0.535, 0.01);
+		assertEquals(vecSimple1.z, 0.802, 0.01);
+	}
+	
+	@Test
 	public void MulScalar_SimplePositiveScalar_Calculated() {
 		Vector ret = vecSimple1.mulScalar(scal1);
 		assertEquals(ret.x, 5, 0.01);
