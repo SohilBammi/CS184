@@ -73,6 +73,22 @@ public class Vector {
 	    return ret;
 	}
 	
+	public Vector mulComponents(Vector vec){
+		Vector ret = new Vector();
+	    ret.x = this.x * vec.x;
+	    ret.y = this.y * vec.y;
+	    ret.z = this.z * vec.z;
+	    return ret;
+	}
+	
+	public Vector divComponents(Vector vec){
+		Vector ret = new Vector();
+	    ret.x = this.x / vec.x;
+	    ret.y = this.y / vec.y;
+	    ret.z = this.z / vec.z;
+	    return ret;
+	}
+	
 	public void printVector(){
 		System.out.println("("+this.x+", "+this.y+", "+this.z+")");
 	}

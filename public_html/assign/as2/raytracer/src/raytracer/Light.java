@@ -4,15 +4,15 @@ import java.awt.Color;
 
 public class Light {
 	
-	private Color col;
-	private Vector dir;
+	private Vector col;
+	private Vector vec;
 	private String type;
 	
-	public Light(Color col, Vector dir, String type){
+	public Light(Vector col, Vector vec, String type){
 		this.col = col;
-		this.dir = dir;
+		this.vec = vec;
 		if(isValidType(type)){
-			this.type = type;
+			this.type = type.toUpperCase();
 		}
 	}
 	
@@ -22,4 +22,17 @@ public class Light {
 		}
 		return false;
 	}
+	
+	public String getType(){
+		return this.type;
+	}
+	
+	public Vector getVec(){
+		return this.vec;
+	}
+	
+	public Vector getColor(){
+		return this.col;
+	}
+	
 }
