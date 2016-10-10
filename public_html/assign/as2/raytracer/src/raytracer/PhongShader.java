@@ -56,7 +56,7 @@ public class PhongShader {
 			Vector diffuseTerm = calcDiffuseTerm(currLight, normVec);
 			Vector specularTerm = calcSpecularTerm(currLight, normVec, viewVec);
 			Vector lightIntensityTerm = diffuseTerm.addVector(specularTerm);
-			pixelRGB.addVector(currLightRGB.mulComponents(lightIntensityTerm));
+			pixelRGB = pixelRGB.addVector(currLightRGB.mulComponents(lightIntensityTerm));
 		}
 		return new Color((float)pixelRGB.x, (float)pixelRGB.y, (float)pixelRGB.z);
 	}

@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.Ignore;
 import static org.junit.Assert.assertEquals;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -60,5 +61,39 @@ public class PhongJunitTest {
 		assertEquals(phongSimpleParams1.kd.z, 0.5, 0.01);
 		assertEquals(phongSimpleParams1.ks.z, 0.5, 0.01);
 		assertEquals(phongSimpleParams1.specCoef, 2, 0.01);
+	}
+	
+	@Test
+	public void CalcDiffuseTerm_SimpleParameters_Calculated() {
+		Vector currLight = new Vector(1, 1, 1);
+		currLight.normalize();
+		Vector normVec = new Vector(0, 0, 1);
+		Vector ret = phongSimpleParams1.calcDiffuseTerm(currLight, normVec);
+		assertEquals(ret.x, 0.2887, 0.01);
+		assertEquals(ret.y, 0.2887, 0.01);
+		assertEquals(ret.z, 0.2887, 0.01);
+	}
+	
+	@Test
+	public void CalcSpecularTerm_SimpleParameters_Calculated() {
+		Vector currLight = new Vector(1, 1, 1);
+		currLight.normalize();
+		Vector normVec = new Vector(0, 0, 1);
+		Vector viewVec = new Vector(0, 0, 1);
+		Vector ret = phongSimpleParams1.calcSpecularTerm(currLight, normVec, viewVec);
+		assertEquals(ret.x, 0.1667, 0.01);
+		assertEquals(ret.y, 0.1667, 0.01);
+		assertEquals(ret.z, 0.1667, 0.01);
+	}
+	
+	@Test
+	public void CalcPixelRGB_SimpleParameters_Calculated() {
+		Vector normVec = new Vector(0, 0, 1);
+		Vector viewVec = new Vector(0, 0, 1);
+		Point p = new Point(0, 0, 1);
+		Color ret = phongSimpleParams1.calcPixelRGB(p, normVec, viewVec);
+		assertEquals(ret.getRed(), 116, 0.01);
+		assertEquals(ret.getGreen(), 116, 0.01);
+		assertEquals(ret.getBlue(), 116, 0.01);
 	}
 }
