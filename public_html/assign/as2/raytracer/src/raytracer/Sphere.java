@@ -70,4 +70,8 @@ public class Sphere implements Polygon{
 		return ret;
 	}
 	
+	public boolean isIntersection(Ray r){
+	    return false;
+	}
+	
 }

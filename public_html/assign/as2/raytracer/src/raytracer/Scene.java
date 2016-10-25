@@ -9,6 +9,9 @@ import javax.imageio.ImageIO;
 
 public class Scene {
 
+    public Scene(Point eye, Point UL, Point UR, Point LR, Point LL){
+        
+    }
     /**
      * @param args
      * @throws IOException 
