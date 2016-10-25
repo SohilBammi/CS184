@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({ 
-   PointJunitTest.class, VectorJunitTest.class, PhongJunitTest.class
+   PointJunitTest.class, VectorJunitTest.class, PhongJunitTest.class, SphereJunitTest.class
 })
 
 public class RaytracerJunitTestSuite {
