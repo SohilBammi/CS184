@@ -70,8 +70,25 @@ public class Sphere implements Polygon{
 		return ret;
 	}
 	
-	public boolean isIntersection(Ray r){
-	    return false;
+	public void translate(double x, double y, double z){
+		this.center.x = this.center.x + x;
+		this.center.y = this.center.y + y;
+		this.center.z = this.center.z + z;
 	}
+	
+	public boolean isIntersection(Ray r){
+		Vector e = new Vector(r.origin.x, r.origin.y, r.origin.z);
+		Vector c = new Vector(this.center.x, this.center.y, this.center.z);
+		Vector d = r.dir;
+		double termA = d.dotProduct(d);
+		double termB = d.mulScalar(2).dotProduct(e.subVector(c));
+		double termC = (e.subVector(c)).dotProduct(e.subVector(c)) - radius*radius;
+		double discriminant = termB*termB - 4*termA*termC;
+		if(discriminant < 0){
+			return false;
+		}
+		return true;
+	}
+	
 	
 }

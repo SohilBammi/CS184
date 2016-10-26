@@ -1,12 +1,12 @@
 package raytracer;
 
 public class Ray {
-    Point start;
-    Point end;
+    Point origin;
+    Vector dir;
     
-    public Ray(Point start, Point end){
-        this.start = start;
-        this.end = end;
+    public Ray(Point eye, Vector dir){
+        this.origin = eye;
+        this.dir = dir;
     }
     
 }

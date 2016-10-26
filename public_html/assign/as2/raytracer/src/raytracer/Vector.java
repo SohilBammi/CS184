@@ -11,6 +11,12 @@ public class Vector {
 	    this.z = z;
 	}
 	
+	public Vector(Point start, Point end){
+		this.x = end.x - start.x;
+		this.y = end.y - start.y;
+		this.z = end.z - start.z;
+	}
+	
 	public Vector(){
 	    this.x = 0;
 	    this.y = 0;

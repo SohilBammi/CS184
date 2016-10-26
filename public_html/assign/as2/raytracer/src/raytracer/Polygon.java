@@ -9,4 +9,5 @@ public interface Polygon {
 	public ArrayList<Point> getPoints(double x, double y);
 	public Point getFrontPoint(double x, double y);
 	public Vector getNormalVector(Point p);
+	public boolean isIntersection(Ray r);
 }
