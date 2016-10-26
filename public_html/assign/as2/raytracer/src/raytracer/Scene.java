@@ -67,7 +67,13 @@ public class Scene {
         			Vector normVec = poly.getNormalVector(pos);
         			viewVec.normalize();
         			viewVec.mulScalar(-1);
-        			col = shader.calcPixelRGB(pos, normVec, viewVec);
+        			ArrayList<Polygon> polygonsMinusCurr = new ArrayList<Polygon>();
+        			for(int i = 0; i < polygonsMinusCurr.size(); i++){
+        			    if(i!=currPoly){
+        			        polygonsMinusCurr.add(polygons.get(i));
+        			    }
+        			}
+        			col = shader.calcPixelRGB(pos, normVec, viewVec, polygonsMinusCurr);
         		}
     			int rgb = col.getRGB();
     			img.setRGB(x, y, rgb);

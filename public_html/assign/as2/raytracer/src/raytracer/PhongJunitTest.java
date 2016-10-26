@@ -91,7 +91,8 @@ public class PhongJunitTest {
 		Vector normVec = new Vector(0, 0, 1);
 		Vector viewVec = new Vector(0, 0, 1);
 		Point p = new Point(0, 0, 1);
-		Color ret = phongSimpleParams1.calcPixelRGB(p, normVec, viewVec);
+		ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+		Color ret = phongSimpleParams1.calcPixelRGB(p, normVec, viewVec, polygons);
 		assertEquals(ret.getRed(), 116, 0.01);
 		assertEquals(ret.getGreen(), 116, 0.01);
 		assertEquals(ret.getBlue(), 116, 0.01);

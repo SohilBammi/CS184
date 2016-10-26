@@ -41,23 +41,40 @@ public class PhongShader {
 		return currLight.mulScalar(-1).addVector(normVec.mulScalar(2 * currLight.dotProduct(normVec)));
 	}
 
-	public Color calcPixelRGB(Point p, Vector normVec, Vector viewVec){
+	public Color calcPixelRGB(Point p, Vector normVec, Vector viewVec, ArrayList<Polygon> polygons){
 		Vector pixelRGB = ka;
 		for(Light light : lights){
-			Vector currLightRGB = light.getColor();
-			Vector currLight;
-			if(light.getType().equals("POINT")){
-				Vector lightVec = light.getVec();
-				currLight = new Vector(lightVec.x - p.x, lightVec.y - p.y, lightVec.z - p.z);
-			}
-			else{
-				currLight = light.getVec().mulScalar(-1);
-			}
-			currLight.normalize();
-			Vector diffuseTerm = calcDiffuseTerm(currLight, normVec);
-			Vector specularTerm = calcSpecularTerm(currLight, normVec, viewVec);
-			Vector lightIntensityTerm = diffuseTerm.addVector(specularTerm);
-			pixelRGB = pixelRGB.addVector(currLightRGB.mulComponents(lightIntensityTerm));
+		    Ray r;
+		    boolean isShadow = false;
+		    if(light.getType().equals("DIR")){
+		        r = new Ray(p, light.getVec());
+		    }
+		    else{
+		        Vector dir = new Vector(p, light.getVec().toPoint());
+		        dir.normalize();
+		        r = new Ray(p, dir);
+		    }
+		    for(Polygon poly : polygons){
+		        if(poly.isIntersection(r)){
+		            isShadow = true;
+		        }
+		    }
+		    if(!isShadow){
+		        Vector currLightRGB = light.getColor();
+	            Vector currLight;
+	            if(light.getType().equals("POINT")){
+	                Vector lightVec = light.getVec();
+	                currLight = new Vector(lightVec.x - p.x, lightVec.y - p.y, lightVec.z - p.z);
+	            }
+	            else{
+	                currLight = light.getVec().mulScalar(-1);
+	            }
+	            currLight.normalize();
+	            Vector diffuseTerm = calcDiffuseTerm(currLight, normVec);
+	            Vector specularTerm = calcSpecularTerm(currLight, normVec, viewVec);
+	            Vector lightIntensityTerm = diffuseTerm.addVector(specularTerm);
+	            pixelRGB = pixelRGB.addVector(currLightRGB.mulComponents(lightIntensityTerm));
+		    }
 		}
 		float pixelRGBflx = round((float)pixelRGB.x, 0, 1);
 		float pixelRGBfly = round((float)pixelRGB.y, 0, 1);

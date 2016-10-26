@@ -23,6 +23,10 @@ public class Vector {
 	    this.z = 0;
 	}
 	
+	public Point toPoint(){
+	    return new Point(this.x, this.y, this.z);
+	}
+	
 	public double magnitude(){
 		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
 	}
