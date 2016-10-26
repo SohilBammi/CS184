@@ -38,8 +38,31 @@ public class DrawImages {
         scene.basicRayTrace();
 	}
 	
+	public static void renderTwoSimpleSpheres() throws IOException{
+	    Point eye = new Point(0, 0, 3);
+        Point UL = new Point(-1, 1, 2);
+        Point UR = new Point(1, 1, 2);
+        Point LR = new Point(1, -1, 2);
+        Point LL = new Point(-1, -1, 2);
+        Sphere sphere1 = new Sphere(new Point(-0.5, 0, 0), 0.5);
+        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        Sphere sphere2 = new Sphere(new Point(0.5, 0, 0), 0.5);
+        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        polygons.add(sphere1);
+        polygons.add(sphere2);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Light dirL = new Light(new Vector(1, 1, 1), new Vector(-1, -1, -1), "DIR");
+        lights.add(dirL);
+        Light pointL = new Light(new Vector(1, 0, 0), new Vector(1, 0, 1), "POINT");
+        lights.add(pointL);
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
+        scene.basicRayTrace();
+	}
+	
 	public static void main(String[] args) throws IOException {
-        //renderSimpleSphereNoShading();
+        renderSimpleSphereNoShading();
 		renderSimpleSphere();
+		//renderTwoSimpleSpheres();
     }
 }

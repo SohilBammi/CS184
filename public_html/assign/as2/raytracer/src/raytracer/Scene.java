@@ -56,18 +56,17 @@ public class Scene {
     	    				currPoly = i;
     	    				t = p.getIntersection(r);
     	    			}
-    	    			
-    	    			int rgb = new Color(255, 0, 0).getRGB();
-    	    			img.setRGB(x, y, rgb);
     	    		}
     	    	}
     			if(t > -1 && currPoly > -1){
         			Polygon poly = polygons.get(currPoly);
         			PhongShader shader = new PhongShader(lights, poly.getKa(), poly.getKd(), poly.getKs(), poly.getP());
         			Point pos = r.getPoint(t);
+        			Point camPos = new Point(x, y, cam.depth);
+        			Vector viewVec = pos.vector(camPos);
         			Vector normVec = poly.getNormalVector(pos);
-        			Vector viewVec = r.getDir();
         			viewVec.normalize();
+        			viewVec.mulScalar(-1);
         			col = shader.calcPixelRGB(pos, normVec, viewVec);
         		}
     			int rgb = col.getRGB();
