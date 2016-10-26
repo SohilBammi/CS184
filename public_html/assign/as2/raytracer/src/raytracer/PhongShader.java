@@ -1,6 +1,7 @@
 package raytracer;
 
 import java.awt.Color;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PhongShader {
@@ -58,6 +59,19 @@ public class PhongShader {
 			Vector lightIntensityTerm = diffuseTerm.addVector(specularTerm);
 			pixelRGB = pixelRGB.addVector(currLightRGB.mulComponents(lightIntensityTerm));
 		}
-		return new Color((float)pixelRGB.x, (float)pixelRGB.y, (float)pixelRGB.z);
+		float pixelRGBflx = round((float)pixelRGB.x, 0, 1);
+		float pixelRGBfly = round((float)pixelRGB.y, 0, 1);
+		float pixelRGBflz = round((float)pixelRGB.z, 0, 1);
+		return new Color(pixelRGBflx, pixelRGBfly, pixelRGBflz);
 	}
+	
+	public float round(float d, float min, float max) {
+		if(d < min){
+			return min;
+		}
+		if(d > max){
+			return max;
+		}
+		return d;
+    }
 }

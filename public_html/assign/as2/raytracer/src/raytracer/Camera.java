@@ -7,7 +7,7 @@ public class Camera {
 	Point LL;
 	double depth;
 	int scale;
-	private final int DEFAULT_SCALE = 200;
+	private final int DEFAULT_SCALE = 2000;
 	int width;
 	int height;
 	
@@ -27,13 +27,14 @@ public class Camera {
 		this.UR = UR;
 		this.LR = LR;
 		this.LL = LL;
+		this.depth = UL.z;
 		this.scale = DEFAULT_SCALE;
 		this.width = (int) (this.UR.x - this.UL.x)*scale;
     	this.height = (int) (this.UR.y - this.LR.y)*scale;
 	}
 	
 	public Point getPointByPixel(double x, double y){
-		return new Point(UL.x + x/width, LL.y + y/height, depth);
+		return new Point(UL.x + x/scale, LL.y + y/scale, depth);
 	}
 	
 	public int getWidth(){

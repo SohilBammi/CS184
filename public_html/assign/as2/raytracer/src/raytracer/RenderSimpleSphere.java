@@ -18,7 +18,8 @@ public class RenderSimpleSphere {
         Sphere sphere = new Sphere(new Point(0, 0, -2), 1);
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         polygons.add(sphere);
-        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
         scene.basicRayTraceNoShading();
     }
 

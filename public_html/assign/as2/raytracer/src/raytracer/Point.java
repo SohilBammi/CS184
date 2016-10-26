@@ -17,6 +17,18 @@ public class Point {
 	    this.z = 0;
 	}
 	
+	public void addPoint(Point p){
+		this.x = this.x + p.x;
+		this.y = this.y + p.y;
+		this.z = this.z + p.z;
+	}
+	
+	public void subPoint(Point p){
+		this.x = this.x - p.x;
+		this.y = this.y - p.y;
+		this.z = this.z - p.z;
+	}
+	
 	public double distance(Point a){
 		return Math.sqrt(Math.pow(this.x-a.x, 2) + Math.pow(this.y-a.y, 2) + Math.pow(this.z-a.z, 2));
 	}

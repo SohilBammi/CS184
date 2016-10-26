@@ -113,4 +113,12 @@ public class SphereJunitTest {
 	    boolean ret = s.isIntersection(r);
 	    assertEquals(ret, true);
 	}
+	
+	@Test
+	public void getIntersection_SimpleParameters_Calculated() {
+	    Sphere s = new Sphere(new Point(0,0,4), 5);
+	    Ray r = new Ray(new Point(10,0,0), new Vector(-1,0,0));
+	    double ret = s.getIntersection(r);
+	    assertEquals(ret, 7, 0.01);
+	}
 }
