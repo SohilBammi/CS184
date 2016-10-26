@@ -105,4 +105,12 @@ public class SphereJunitTest {
         assertEquals(ret2.get(1).y, 0.5, 0.01);
         assertEquals(ret2.get(1).z, -0.707, 0.01);
     }
+	
+	@Test
+	public void IsIntersection_SimpleParameters_Calculated() {
+	    Sphere s = new Sphere(new Point(0,0,4), 5);
+	    Ray r = new Ray(new Point(10,0,0), new Vector(-1,0,0));
+	    boolean ret = s.isIntersection(r);
+	    assertEquals(ret, true);
+	}
 }
