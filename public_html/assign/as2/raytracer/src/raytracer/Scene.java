@@ -46,7 +46,9 @@ public class Scene {
     		for(int y = 0; y < cam.getHeight(); y++){
     			Color col = new Color(0,0,0);
     			Vector dir = new Vector(eye, cam.getPointByPixel(x, y));
-    			Ray r = new Ray(eye, dir);
+    			dir.normalize();
+    			
+    			Ray r = new Ray(cam.getPointByPixel(x, y), dir);
     			double t = -1;
     			int currPoly = -1;
     			for(int i = 0; i < polygons.size(); i++){

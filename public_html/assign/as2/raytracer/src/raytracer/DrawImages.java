@@ -105,10 +105,10 @@ public class DrawImages {
 	}
 	
 	public static void main(String[] args) throws IOException {
-        //renderSimpleSphereNoShading("basic-raytrace-no_shading");
+        renderSimpleSphereNoShading("basic-raytrace-no_shading");
 		renderTwoSimpleSpheresNoShading("basic-raytrace-two_spheres_no_shading");
-		//renderSimpleSphere("basic-raytrace-one_sphere");
-		//renderTwoSimpleSpheres("basic-raytrace-two_spheres");
+		renderSimpleSphere("basic-raytrace-one_sphere");
+		renderTwoSimpleSpheres("basic-raytrace-two_spheres");
 		renderTwoSpheresShadows("basic-raytrace-two_spheres_shadows");
     }
 }
