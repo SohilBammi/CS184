@@ -22,6 +22,7 @@ public class Face implements Polygon{
         this.ks = KS_DEFAULT;
         this.kr = KR_DEFAULT;
         this.p = P_DEFAULT;
+        setNormalVector(vertices.get(0), vertices.get(1), vertices.get(2));
     }
     
     public Face(ArrayList<Point> vertices){
@@ -31,6 +32,7 @@ public class Face implements Polygon{
         this.ks = KS_DEFAULT;
         this.kr = KR_DEFAULT;
         this.p = P_DEFAULT;
+        setNormalVector(vertices.get(0), vertices.get(1), vertices.get(2));
     }
     
     public Face(ArrayList<Point> vertices, Vector ka, Vector kd, Vector ks, double kr, double p){
@@ -40,6 +42,7 @@ public class Face implements Polygon{
         this.ks = ks;
         this.kr = kr;
         this.p = p;
+        setNormalVector(vertices.get(0), vertices.get(1), vertices.get(2));
     }
     
     public void setMaterial(Vector ka, Vector kd, Vector ks, double kr, double p){
@@ -70,8 +73,10 @@ public class Face implements Polygon{
         return this.p;
     }
 
-    public Vector getNormalVector(Point p) {
-        return null;
+    public void setNormalVector(Point p1, Point p2, Point p3) {
+        Vector v1 = new Vector(p1, p2);
+        Vector v2 = new Vector(p1, p3);
+        this.normalVec =  v1.crossProduct(v2);
     }
     
     public void translate(double x, double y, double z){
@@ -89,8 +94,14 @@ public class Face implements Polygon{
         return false;
     }
     
-    
     public double getIntersection(Ray r){
-        return -1;
+        Point p1 = vertices.get(0);
+        Vector term1 = p1.vector(r.origin);
+        double term2 = r.dir.dotProduct(normalVec);
+        return (term1.dotProduct(normalVec))/term2;
+    }
+
+    public Vector getNormalVector(Point p) {
+        return this.normalVec;
     }
 }

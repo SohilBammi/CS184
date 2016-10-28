@@ -26,11 +26,11 @@ public class DrawImages {
         Point LR = new Point(1, -1, 3);
         Point LL = new Point(-1, -1, 3);
         Sphere sphere1 = new Sphere();
-        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         polygons.add(sphere1);
         Sphere sphere2 = new Sphere(new Point(1,1,1), 0.5);
-        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         polygons.add(sphere2);
         ArrayList<Light> lights = new ArrayList<Light>();
         Light dirL = new Light(new Vector(1, 1, 1), new Vector(-1, -1, -1), "DIR");
@@ -48,7 +48,7 @@ public class DrawImages {
         Point LR = new Point(1, -1, 2);
         Point LL = new Point(-1, -1, 2);
         Sphere sphere = new Sphere();
-        sphere.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         polygons.add(sphere);
         ArrayList<Light> lights = new ArrayList<Light>();
@@ -67,9 +67,9 @@ public class DrawImages {
         Point LR = new Point(1, -1, 2);
         Point LL = new Point(-1, -1, 2);
         Sphere sphere1 = new Sphere(new Point(-0.5, 0, 0), 0.5);
-        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         Sphere sphere2 = new Sphere(new Point(0.5, 0, 0), 0.5);
-        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         polygons.add(sphere1);
         polygons.add(sphere2);
@@ -89,11 +89,11 @@ public class DrawImages {
         Point LR = new Point(1, -1, 3);
         Point LL = new Point(-1, -1, 3);
         Sphere sphere1 = new Sphere();
-        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere1.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         polygons.add(sphere1);
         Sphere sphere2 = new Sphere(new Point(1,1,1), 0.5);
-        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 2);
+        sphere2.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         polygons.add(sphere2);
         ArrayList<Light> lights = new ArrayList<Light>();
         Light dirL = new Light(new Vector(1, 1, 1), new Vector(-1, -1, -1), "DIR");

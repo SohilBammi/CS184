@@ -8,10 +8,12 @@ public class Sphere implements Polygon{
 	Vector ka;
 	Vector kd;
 	Vector ks;
+	double kr;
 	double p;
 	final Vector KA_DEFAULT = new Vector(0.5, 0.5, 0.5);
-	final Vector KD_DEFAULT = new Vector(0.5, 0.5, 0.5);;
-	final Vector KS_DEFAULT = new Vector(0.5, 0.5, 0.5);;
+	final Vector KD_DEFAULT = new Vector(0.5, 0.5, 0.5);
+	final Vector KS_DEFAULT = new Vector(0.5, 0.5, 0.5);
+	final double KR_DEFAULT = 1;
 	final double P_DEFAULT = 10;
 	
 	public Sphere(){
@@ -20,6 +22,7 @@ public class Sphere implements Polygon{
 		this.ka = KA_DEFAULT;
 		this.kd = KD_DEFAULT;
 		this.ks = KS_DEFAULT;
+		this.kr = KR_DEFAULT;
 		this.p = P_DEFAULT;
 	}
 	
@@ -29,22 +32,25 @@ public class Sphere implements Polygon{
 		this.ka = KA_DEFAULT;
 		this.kd = KD_DEFAULT;
 		this.ks = KS_DEFAULT;
+		this.kr = KR_DEFAULT;
 		this.p = P_DEFAULT;
 	}
 	
-	public Sphere(Point center, double radius, Vector ka, Vector kd, Vector ks, double p){
+	public Sphere(Point center, double radius, Vector ka, Vector kd, Vector ks, double kr, double p){
 		this.center = center;
 		this.radius = radius;
 		this.ka = ka;
 		this.kd = kd;
 		this.ks = ks;
+		this.kr = kr;
 		this.p = p;
 	}
 	
-	public void setMaterial(Vector ka, Vector kd, Vector ks, double p){
+	public void setMaterial(Vector ka, Vector kd, Vector ks, double kr, double p){
 		this.ka = ka;
 		this.kd = kd;
 		this.ks = ks;
+		this.kr = kr;
 		this.p = p;
 	}
 	
@@ -60,6 +66,10 @@ public class Sphere implements Polygon{
 		return this.ks;
 	}
 
+	public double getKr() {
+        return this.kr;
+    }
+	
 	public double getP() {
 		return this.p;
 	}
@@ -76,6 +86,10 @@ public class Sphere implements Polygon{
 		this.center.z = this.center.z + z;
 	}
 	
+	public void scale(double scale){
+	    this.radius = this.radius * scale;
+	}
+	
 	public boolean isIntersection(Ray r){
 		Vector e = new Vector(r.origin.x, r.origin.y, r.origin.z);
 		Vector c = new Vector(this.center.x, this.center.y, this.center.z);
@@ -89,7 +103,6 @@ public class Sphere implements Polygon{
 		}
 		return true;
 	}
-	
 	
 	public double getIntersection(Ray r){
 		Vector e = new Vector(r.origin.x, r.origin.y, r.origin.z);
@@ -105,5 +118,4 @@ public class Sphere implements Polygon{
 		double t1 = (numeratorTerm1 - numeratorTerm2)/dDotd;
 		return Math.min(t0, t1);
 	}
-	
 }
