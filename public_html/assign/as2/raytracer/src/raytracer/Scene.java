@@ -22,9 +22,16 @@ public class Scene {
     }
     
     public void basicRayTraceNoShading(String fileName) throws IOException{
-    	BufferedImage img = new BufferedImage(cam.getWidth(), cam.getHeight(), BufferedImage.TYPE_INT_RGB);
+        double currPixel = 1;
+        double currPercent = 0;
+        int size = cam.getWidth()*cam.getHeight();
+        BufferedImage img = new BufferedImage(cam.getWidth(), cam.getHeight(), BufferedImage.TYPE_INT_RGB);
     	for(int x = 0; x < cam.getWidth(); x++){
     		for(int y = 0; y < cam.getHeight(); y++){
+    		    if(((currPixel/size)*100)>(currPercent+5)){
+                    currPercent= currPercent+5;
+                    System.out.println(currPercent+"%");
+                }
     			Vector dir = new Vector(eye, cam.getPointByPixel(x, y));
     			Ray r = new Ray(eye, dir);
     			for(Polygon p : polygons){
@@ -33,6 +40,7 @@ public class Scene {
     	    			img.setRGB(x, y, rgb);
     	    		}
     	    	}
+    			currPixel++;
     		}
     	}
     	File f = new File("bin/" + fileName + ".png");
@@ -41,9 +49,16 @@ public class Scene {
     }
     
     public void basicRayTrace(String fileName) throws IOException{
+        double currPixel = 1;
+        double currPercent = 0;
+        int size = cam.getWidth()*cam.getHeight();
     	BufferedImage img = new BufferedImage(cam.getWidth(), cam.getHeight(), BufferedImage.TYPE_INT_RGB);
     	for(int x = 0; x < cam.getWidth(); x++){
-    		for(int y = 0; y < cam.getHeight(); y++){
+    		for(int y = 0; y < cam.getHeight(); y++){ 
+    		    if(((currPixel/size)*100)>(currPercent+5)){
+    		        currPercent= currPercent+5;
+    		        System.out.println(currPercent+"%");
+    		    }
     			Color col = new Color(0,0,0);
     			Vector dir = new Vector(eye, cam.getPointByPixel(x, y));
     			dir.normalize();
@@ -79,6 +94,7 @@ public class Scene {
         		}
     			int rgb = col.getRGB();
     			img.setRGB(x, y, rgb);
+    			currPixel++;
     		}
     	}
     	File f = new File("bin/" + fileName + ".png");

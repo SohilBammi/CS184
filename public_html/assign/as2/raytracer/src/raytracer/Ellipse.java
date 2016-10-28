@@ -220,7 +220,7 @@ public class Ellipse implements Polygon{
     
     
     public double getIntersection(Ray r){
-        transformRay(r);
+        r = transformRay(r);
         Sphere s = new Sphere();
         return s.getIntersection(r);
     }    
