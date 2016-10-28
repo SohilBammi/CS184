@@ -41,6 +41,10 @@ public class Ellipse implements Polygon{
         this.p = P_DEFAULT;
         this.isTransformed = false;
         this.transformMatrix = getIdentityMatrix();
+        if(radius!=1)
+            scale(radius, radius, radius);
+        if(center.x!=0 || center.y!=0 ||center.z!=0)
+            translate(center.x, center.y, center.z);
     }
     
     public Ellipse(Point center, double radius, Vector ka, Vector kd, Vector ks, double kr, double p){
@@ -53,6 +57,10 @@ public class Ellipse implements Polygon{
         this.p = p;
         this.isTransformed = false;
         this.transformMatrix = getIdentityMatrix();
+        if(radius!=1)
+            scale(radius, radius, radius);
+        if(center.x!=0 || center.y!=0 ||center.z!=0)
+            translate(center.x, center.y, center.z);
     }
     
     public void setMaterial(Vector ka, Vector kd, Vector ks, double kr, double p){
@@ -84,7 +92,13 @@ public class Ellipse implements Polygon{
     }
 
     public Vector getNormalVector(Point p) {
-        Vector normVec = new Vector(p.x-this.center.x, p.y-this.center.y, p.z-this.center.z);
+        Double[][] transformMatrixInv = transformationMatrixInverse(transformMatrix);
+        double unitSphereX = p.x * transformMatrixInv[0][0] + p.y *transformMatrixInv[0][1] +p.z * transformMatrixInv[0][2] + transformMatrixInv[0][3];
+        double unitSphereY = p.x * transformMatrixInv[1][0] + p.y *transformMatrixInv[1][1] +p.z * transformMatrixInv[1][2] + transformMatrixInv[1][3];
+        double unitSphereZ = p.x * transformMatrixInv[2][0] + p.y *transformMatrixInv[2][1] +p.z * transformMatrixInv[2][2] + transformMatrixInv[2][3];
+        Point unitSphereP = new Point(unitSphereX, unitSphereY, unitSphereZ);
+        Sphere sphere = new Sphere();
+        Vector normVec = sphere.getNormalVector(unitSphereP);
         normVec.normalize();
         return normVec;
     }
@@ -180,16 +194,18 @@ public class Ellipse implements Polygon{
         }
         else{
             this.transformMatrix = m;
+            isTransformed = true;
         }
     }
     
     private Ray transformRay(Ray r){
-        double originX = r.origin.x * transformMatrix[0][0] + r.origin.y *transformMatrix[0][1] +r.origin.z * transformMatrix[0][2] + transformMatrix[0][3];
-        double originY = r.origin.x * transformMatrix[1][0] + r.origin.y *transformMatrix[1][1] +r.origin.z * transformMatrix[1][2] + transformMatrix[0][3];
-        double originZ = r.origin.x * transformMatrix[2][0] + r.origin.y *transformMatrix[2][1] +r.origin.z * transformMatrix[2][2] + transformMatrix[0][3];
-        double dirX = r.dir.x * transformMatrix[0][0] + r.dir.y *transformMatrix[0][1] +r.dir.z * transformMatrix[0][2];
-        double dirY = r.dir.x * transformMatrix[1][0] + r.dir.y *transformMatrix[1][1] +r.dir.z * transformMatrix[1][2];
-        double dirZ = r.dir.x * transformMatrix[2][0] + r.dir.y *transformMatrix[2][1] +r.dir.z * transformMatrix[2][2];
+        Double[][] transformMatrixInv = transformationMatrixInverse(transformMatrix);
+        double originX = r.origin.x * transformMatrixInv[0][0] + r.origin.y *transformMatrixInv[0][1] +r.origin.z * transformMatrixInv[0][2] + transformMatrixInv[0][3];
+        double originY = r.origin.x * transformMatrixInv[1][0] + r.origin.y *transformMatrixInv[1][1] +r.origin.z * transformMatrixInv[1][2] + transformMatrixInv[1][3];
+        double originZ = r.origin.x * transformMatrixInv[2][0] + r.origin.y *transformMatrixInv[2][1] +r.origin.z * transformMatrixInv[2][2] + transformMatrixInv[2][3];
+        double dirX = r.dir.x * transformMatrixInv[0][0] + r.dir.y *transformMatrixInv[0][1] +r.dir.z * transformMatrixInv[0][2];
+        double dirY = r.dir.x * transformMatrixInv[1][0] + r.dir.y *transformMatrixInv[1][1] +r.dir.z * transformMatrixInv[1][2];
+        double dirZ = r.dir.x * transformMatrixInv[2][0] + r.dir.y *transformMatrixInv[2][1] +r.dir.z * transformMatrixInv[2][2];
         Point origin = new Point(originX, originY, originZ);
         Vector dir = new Vector(dirX, dirY, dirZ);
         return new Ray(origin, dir);
@@ -197,7 +213,7 @@ public class Ellipse implements Polygon{
     }
     
     public boolean isIntersection(Ray r){
-        transformRay(r);
+        r = transformRay(r);
         Sphere s = new Sphere();
         return s.isIntersection(r);
     }

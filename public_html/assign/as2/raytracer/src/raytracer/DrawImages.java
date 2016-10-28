@@ -104,6 +104,39 @@ public class DrawImages {
         scene.basicRayTrace(filename);
 	}
 	
+	public static void renderSimpleEllipseNoShading(String filename) throws IOException{
+        Point eye = new Point(0, 0, 0);
+        Point UL = new Point(-1, 1, -1);
+        Point UR = new Point(1, 1, -1);
+        Point LR = new Point(1, -1, -1);
+        Point LL = new Point(-1, -1, -1);
+        Ellipse ellipse = new Ellipse(new Point(0, 0, -2), 1);
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        polygons.add(ellipse);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
+        scene.basicRayTraceNoShading(filename);
+    }
+	
+	public static void renderSimpleEllipse(String filename) throws IOException{
+        Point eye = new Point(0, 0, 3);
+        Point UL = new Point(-1, 1, 2);
+        Point UR = new Point(1, 1, 2);
+        Point LR = new Point(1, -1, 2);
+        Point LL = new Point(-1, -1, 2);
+        Ellipse ellipse = new Ellipse(new Point(0, 0, -2), 1);
+        ellipse.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        polygons.add(ellipse);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Light dirL = new Light(new Vector(1, 1, 1), new Vector(-1, -1, -1), "DIR");
+        lights.add(dirL);
+        Light pointL = new Light(new Vector(1, 0, 0), new Vector(1, 0, 1), "POINT");
+        lights.add(pointL);
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
+        scene.basicRayTrace(filename);
+    }
+	
 	public static void renderSimpleTriangleNoShading(String filename) throws IOException{
         Point eye = new Point(0, 0, 1);
         Point UL = new Point(-3, 3, -1);
@@ -158,6 +191,8 @@ public class DrawImages {
 		//renderTwoSimpleSpheres("basic-raytrace-two_spheres");
 		//renderTwoSpheresShadows("basic-raytrace-two_spheres_shadows");
 	    //renderSimpleTriangleNoShading("basic-raytrace-triangle-no_shading");
-	    renderSimpleTriangle("basic-raytrace-triangle");
+	    //renderSimpleTriangle("basic-raytrace-triangle");
+	    renderSimpleEllipseNoShading("basic-raytrace-ellipse-no_shading");
+	    renderSimpleEllipse("basic-raytrace-ellipse");
     }
 }
