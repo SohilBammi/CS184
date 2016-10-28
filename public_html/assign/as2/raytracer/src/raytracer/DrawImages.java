@@ -1,7 +1,11 @@
 package raytracer;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class DrawImages {
 	
@@ -127,6 +131,7 @@ public class DrawImages {
         Point LL = new Point(-1, -1, 2);
         Ellipse ellipse = new Ellipse();
         ellipse.scale(1, 2, 1);
+        ellipse.rotate(45, 45, 45);
         ellipse.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         polygons.add(ellipse);
@@ -187,14 +192,32 @@ public class DrawImages {
     }
 	
 	public static void main(String[] args) throws IOException {
-        //renderSimpleSphereNoShading("basic-raytrace-no_shading");
-		//renderTwoSimpleSpheresNoShading("basic-raytrace-two_spheres_no_shading");
-		//renderSimpleSphere("basic-raytrace-one_sphere");
-		//renderTwoSimpleSpheres("basic-raytrace-two_spheres");
-		//renderTwoSpheresShadows("basic-raytrace-two_spheres_shadows");
-	    //renderSimpleTriangleNoShading("basic-raytrace-triangle-no_shading");
-	    //renderSimpleTriangle("basic-raytrace-triangle");
-	    renderSimpleEllipseNoShading("basic-raytrace-ellipse-no_shading");
-	    renderSimpleEllipse("basic-raytrace-ellipse");
+	    System.out.println("Would you like to render sample images? (y/n)");
+	    Scanner sc = new Scanner(System.in);
+	    String renderSampleImgs = sc.nextLine();
+	    if(renderSampleImgs.toUpperCase().equals("Y") || renderSampleImgs.toUpperCase().equals("N")){
+	        if(renderSampleImgs.toUpperCase().equals("Y")){
+    	        renderSimpleSphereNoShading("basic-raytrace-no_shading");
+    	        renderTwoSimpleSpheresNoShading("basic-raytrace-two_spheres_no_shading");
+    	        renderSimpleSphere("basic-raytrace-one_sphere");
+    	        renderTwoSimpleSpheres("basic-raytrace-two_spheres");
+    	        renderTwoSpheresShadows("basic-raytrace-two_spheres_shadows");
+    	        renderSimpleTriangleNoShading("basic-raytrace-triangle-no_shading");
+    	        renderSimpleTriangle("basic-raytrace-triangle");
+    	        renderSimpleEllipseNoShading("basic-raytrace-ellipse-no_shading");
+    	        renderSimpleEllipse("basic-raytrace-ellipse");
+	        }
+	        System.out.println("Input File Path: ");
+	        String filename = sc.nextLine();
+	        BufferedReader br = new BufferedReader(new FileReader(filename));
+            while (br.readLine() != null) {
+                System.out.println(br.readLine());
+            }
+	        br.close();
+	    }
+	    else{
+	        System.out.println("Invalid Input");
+	    }
+	    sc.close();
     }
 }
