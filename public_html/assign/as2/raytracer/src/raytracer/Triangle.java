@@ -68,7 +68,17 @@ public class Triangle implements Polygon{
     }
     
     public void translate(double x, double y, double z){
-        //method stub
+        this.vertex1.x = this.vertex1.x + x;
+        this.vertex1.y = this.vertex1.y + y;
+        this.vertex1.z = this.vertex1.z + z;
+        
+        this.vertex2.x = this.vertex2.x + x;
+        this.vertex2.y = this.vertex2.y + y;
+        this.vertex2.z = this.vertex2.z + z;
+        
+        this.vertex3.x = this.vertex3.x + x;
+        this.vertex3.y = this.vertex3.y + y;
+        this.vertex3.z = this.vertex3.z + z;
     }
     
     public boolean isIntersection(Ray r){
