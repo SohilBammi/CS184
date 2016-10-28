@@ -34,7 +34,7 @@ public class Camera {
 	}
 	
 	public Point getPointByPixel(double x, double y){
-		return new Point(UL.x + (x+1)/scale, LL.y + (y+1)/scale, depth);
+		return new Point(UL.x + (x+1)/scale, UL.y - (y+1)/scale, depth);
 	}
 	
 	public int getWidth(){

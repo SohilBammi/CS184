@@ -21,7 +21,7 @@ public class Scene {
         this.lights = lights;
     }
     
-    public void basicRayTraceNoShading() throws IOException{
+    public void basicRayTraceNoShading(String fileName) throws IOException{
     	BufferedImage img = new BufferedImage(cam.getWidth(), cam.getHeight(), BufferedImage.TYPE_INT_RGB);
     	for(int x = 0; x < cam.getWidth(); x++){
     		for(int y = 0; y < cam.getHeight(); y++){
@@ -35,12 +35,12 @@ public class Scene {
     	    	}
     		}
     	}
-    	File f = new File("bin/basicRayTraceNoShading.png");
+    	File f = new File("bin/" + fileName + ".png");
         ImageIO.write(img, "PNG", f);
         System.out.println("Complete.");
     }
     
-    public void basicRayTrace() throws IOException{
+    public void basicRayTrace(String fileName) throws IOException{
     	BufferedImage img = new BufferedImage(cam.getWidth(), cam.getHeight(), BufferedImage.TYPE_INT_RGB);
     	for(int x = 0; x < cam.getWidth(); x++){
     		for(int y = 0; y < cam.getHeight(); y++){
@@ -62,7 +62,7 @@ public class Scene {
         			Polygon poly = polygons.get(currPoly);
         			PhongShader shader = new PhongShader(lights, poly.getKa(), poly.getKd(), poly.getKs(), poly.getP());
         			Point pos = r.getPoint(t);
-        			Point camPos = new Point(x, y, cam.depth);
+        			Point camPos = cam.getPointByPixel(x, y);
         			Vector viewVec = pos.vector(camPos);
         			Vector normVec = poly.getNormalVector(pos);
         			viewVec.normalize();
@@ -79,7 +79,7 @@ public class Scene {
     			img.setRGB(x, y, rgb);
     		}
     	}
-    	File f = new File("bin/basicRayTrace.png");
+    	File f = new File("bin/" + fileName + ".png");
         ImageIO.write(img, "PNG", f);
         System.out.println("Complete.");
     }
