@@ -19,6 +19,9 @@ public class Triangle implements Polygon {
     final double P_DEFAULT = 10;
     
     public Triangle(){
+        this.vertex1 = new Point(0, 1, 0);
+        this.vertex2 = new Point(-1, -1, 0);
+        this.vertex3 = new Point(1, -1, 0);
         this.ka = KA_DEFAULT;
         this.kd = KD_DEFAULT;
         this.ks = KS_DEFAULT;
@@ -40,6 +43,9 @@ public class Triangle implements Polygon {
     }
     
     public Triangle(Point vertex1, Point vertex2, Point vertex3, Vector ka, Vector kd, Vector ks, double kr, double p){
+        this.vertex1 = vertex1;
+        this.vertex2 = vertex2;
+        this.vertex3 = vertex3;
         this.ka = ka;
         this.kd = kd;
         this.ks = ks;
@@ -48,10 +54,11 @@ public class Triangle implements Polygon {
         setNormalVector();
     }
     
-    public void setMaterial(Vector ka, Vector kd, Vector ks, double p){
+    public void setMaterial(Vector ka, Vector kd, Vector ks, double kr, double p){
         this.ka = ka;
         this.kd = kd;
         this.ks = ks;
+        this.kr = kr;
         this.p = p;
     }
     
@@ -116,9 +123,9 @@ public class Triangle implements Polygon {
         double g = dir.x;
         double h = dir.y;
         double i = dir.z;
-        double j = vertex1.x - dir.x;
-        double k = vertex1.y - dir.y;
-        double l = vertex1.z - dir.z;
+        double j = vertex1.x - r.origin.x;
+        double k = vertex1.y - r.origin.y;
+        double l = vertex1.z - r.origin.z;
         double m = calcM(r);
         double term1 = j*(e*i - h*f);
         double term2 = k*(g*f - d*i);
@@ -138,9 +145,9 @@ public class Triangle implements Polygon {
         double g = dir.x;
         double h = dir.y;
         double i = dir.z;
-        double j = vertex1.x - dir.x;
-        double k = vertex1.y - dir.y;
-        double l = vertex1.z - dir.z;
+        double j = vertex1.x - r.origin.x;
+        double k = vertex1.y - r.origin.y;
+        double l = vertex1.z - r.origin.z;
         double m = calcM(r);
         double term1 = i*(a*k - j*b);
         double term2 = h*(j*c - a*l);
@@ -166,7 +173,7 @@ public class Triangle implements Polygon {
     public boolean isIntersection(Ray r){
         double beta = calcBeta(r);
         double gamma = calcGamma(r);
-        if (beta > 0 && gamma > 0 && gamma+beta > 1) {
+        if (beta > 0 && gamma > 0 && gamma+beta < 1) {
             return true;
         }
         return false;

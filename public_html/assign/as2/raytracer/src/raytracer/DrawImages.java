@@ -104,11 +104,60 @@ public class DrawImages {
         scene.basicRayTrace(filename);
 	}
 	
+	public static void renderSimpleTriangleNoShading(String filename) throws IOException{
+        Point eye = new Point(0, 0, 1);
+        Point UL = new Point(-3, 3, -1);
+        Point UR = new Point(3, 3, -1);
+        Point LR = new Point(3, -3, -1);
+        Point LL = new Point(-3, -3, -1);
+        Triangle triangle = new Triangle();
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        polygons.add(triangle);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
+        scene.basicRayTraceNoShading(filename);
+    }
+	
+	public static void renderComplexTriangleNoShading(String filename) throws IOException{
+        Point eye = new Point(0, 0, 1);
+        Point UL = new Point(-3, 3, -1);
+        Point UR = new Point(3, 3, -1);
+        Point LR = new Point(3, -3, -1);
+        Point LL = new Point(-3, -3, -1);
+        Triangle triangle = new Triangle();
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        polygons.add(triangle);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
+        scene.basicRayTraceNoShading(filename);
+    }
+	
+	public static void renderSimpleTriangle(String filename) throws IOException{
+	    Point eye = new Point(0, 0, 3);
+        Point UL = new Point(-1, 1, 2);
+        Point UR = new Point(1, 1, 2);
+        Point LR = new Point(1, -1, 2);
+        Point LL = new Point(-1, -1, 2);
+        Triangle triangle = new Triangle();
+        triangle.setMaterial(new Vector(0, 0, 0), new Vector(0.5, 0.5, 0.5), new Vector(0.5,0.5,0.5), 1, 2);
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        polygons.add(triangle);
+        ArrayList<Light> lights = new ArrayList<Light>();
+        Light dirL = new Light(new Vector(1, 1, 1), new Vector(-1, -1, -1), "DIR");
+        lights.add(dirL);
+        Light pointL = new Light(new Vector(1, 0, 0), new Vector(1, 0, 1), "POINT");
+        lights.add(pointL);
+        Scene scene = new Scene(eye, UL, UR, LR, LL, polygons, lights);
+        scene.basicRayTrace(filename);
+    }
+	
 	public static void main(String[] args) throws IOException {
-        renderSimpleSphereNoShading("basic-raytrace-no_shading");
-		renderTwoSimpleSpheresNoShading("basic-raytrace-two_spheres_no_shading");
-		renderSimpleSphere("basic-raytrace-one_sphere");
-		renderTwoSimpleSpheres("basic-raytrace-two_spheres");
-		renderTwoSpheresShadows("basic-raytrace-two_spheres_shadows");
+        //renderSimpleSphereNoShading("basic-raytrace-no_shading");
+		//renderTwoSimpleSpheresNoShading("basic-raytrace-two_spheres_no_shading");
+		//renderSimpleSphere("basic-raytrace-one_sphere");
+		//renderTwoSimpleSpheres("basic-raytrace-two_spheres");
+		//renderTwoSpheresShadows("basic-raytrace-two_spheres_shadows");
+	    //renderSimpleTriangleNoShading("basic-raytrace-triangle-no_shading");
+	    renderSimpleTriangle("basic-raytrace-triangle");
     }
 }
