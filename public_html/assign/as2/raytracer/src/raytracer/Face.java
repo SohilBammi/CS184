@@ -104,4 +104,18 @@ public class Face implements Polygon{
     public Vector getNormalVector(Point p) {
         return this.normalVec;
     }
+
+	public Ray getNewRay(Ray r) {
+		return r;
+	}
+
+	public void scale(double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void rotate(double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,77 +1,50 @@
 package raytracer;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class ObjParser {
     public ArrayList<Point> vertices;
     public ArrayList<Face> faces;
     public ArrayList<Triangle> triangles;
+    String filename;
+    
     
     public ObjParser(String filename) throws IOException{
-        FileInputStream fis = new FileInputStream(filename);
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader br = new BufferedReader(isr);
-        loadFaces(br);
+    	this.filename = filename;
+    	this.vertices = new ArrayList<Point>();
+    	this.triangles = new ArrayList<Triangle>();
     }
 
-    public void loadFaces(BufferedReader br) throws IOException{
-        String newLine = br.readLine();
-        while(newLine != null){
-            if(newLine.length() > 0){
-                newLine = newLine.trim();
-                StringTokenizer st = new StringTokenizer(newLine, " ");
-                if(st.nextToken().equals("v")){
-                    double x = Double.parseDouble(st.nextToken());
-                    double y = Double.parseDouble(st.nextToken());
-                    double z = Double.parseDouble(st.nextToken());
-                    vertices.add(new Point(x, y, z));
-                }
-      
-                if(st.nextToken().equals("f")){
-                    ArrayList<Integer> vertexSet = new ArrayList<Integer>();
-                    ArrayList<Point> faceVertexSet = new ArrayList<Point>();
-                    for(int i = 0; i < st.countTokens(); i++){
-                        vertexSet.add(Integer.parseInt(st.nextToken()));
-                    }
-                    for(int vertex : vertexSet){
-                        faceVertexSet.add(vertices.get(vertexSet.get(vertex-1)));
-                    }
-                    faces.add(new Face(faceVertexSet));
-                }
-            }
-        }
+    public static void main(String[] args) throws IOException {
+        ObjParser objParse = new ObjParser("bin/input/flattriangle.obj");
+        objParse.loadTriangles();
+        System.out.println("done");
     }
+
     
-    private void loadTriangles(BufferedReader br) throws IOException{
-        String newLine = br.readLine();
-        while(newLine != null){
-            if(newLine.length() > 0){
-                newLine = newLine.trim();
-                StringTokenizer st = new StringTokenizer(newLine, " ");
-                if(st.nextToken().equals("v")){
-                    double x = Double.parseDouble(st.nextToken());
-                    double y = Double.parseDouble(st.nextToken());
-                    double z = Double.parseDouble(st.nextToken());
-                    vertices.add(new Point(x, y, z));
-                }
-      
-                if(st.nextToken().equals("f")){
-                    ArrayList<Integer> vertexSet = new ArrayList<Integer>();
-                    ArrayList<Point> faceVertexSet = new ArrayList<Point>();
-                    for(int i = 0; i < st.countTokens(); i++){
-                        vertexSet.add(Integer.parseInt(st.nextToken()));
-                    }
-                    for(int vertex : vertexSet){
-                        faceVertexSet.add(vertices.get(vertexSet.get(vertex-1)));
-                    }
-                    triangles.add(new Triangle(faceVertexSet.get(0), faceVertexSet.get(1), faceVertexSet.get(2)));
-                }
+    private void loadTriangles() throws IOException{
+    	for(String line : Files.readAllLines(Paths.get(this.filename))) {
+            String[] words = line.split(" "); 
+            if(words[0].equals("v")){
+            	double x = Double.parseDouble(words[1]);
+                double y = Double.parseDouble(words[2]);
+                double z = Double.parseDouble(words[3]);
+                vertices.add(new Point(x, y, z));
             }
-        }
+            if(words[0].equals("f")){
+            	ArrayList<Integer> vertexSet = new ArrayList<Integer>();
+                ArrayList<Point> faceVertexSet = new ArrayList<Point>();
+                for(int i = 1; i < 4; i++){
+                    vertexSet.add(Integer.parseInt(words[i]));
+                }
+                for(int i = 0; i < 3; i++){
+                    faceVertexSet.add(vertices.get(vertexSet.get(i)-1));
+                }
+                triangles.add(new Triangle(faceVertexSet.get(0), faceVertexSet.get(1), faceVertexSet.get(2)));
+            }
+    	}
     }
 }

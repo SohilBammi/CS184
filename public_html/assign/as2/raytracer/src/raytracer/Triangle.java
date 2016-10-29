@@ -16,7 +16,9 @@ public class Triangle implements Polygon {
     final Vector KD_DEFAULT = new Vector(0.5, 0.5, 0.5);
     final Vector KS_DEFAULT = new Vector(0.5, 0.5, 0.5);
     final double KR_DEFAULT = 1;
-    final double P_DEFAULT = 10;
+    final double P_DEFAULT = 10; 
+    double[][] transformMatrix;
+    double[][] transformMatrixInv;
     
     public Triangle(){
         this.vertex1 = new Point(0, 1, 0);
@@ -86,6 +88,7 @@ public class Triangle implements Polygon {
         Vector v1 = new Vector(this.vertex1, this.vertex2);
         Vector v2 = new Vector(this.vertex1, this.vertex3);
         this.normalVec =  v1.crossProduct(v2);
+        this.normalVec.normalize();
     }
 
     public double getNormalVectorAlpha(Point p) {
@@ -181,7 +184,7 @@ public class Triangle implements Polygon {
 
     public double getIntersection(Ray r) {
         Point p1 = vertex1;
-        Vector term1 = p1.vector(r.origin);
+        Vector term1 = r.origin.vector(p1);
         double term2 = r.dir.dotProduct(normalVec);
         return (term1.dotProduct(normalVec))/term2;
     }
@@ -189,4 +192,18 @@ public class Triangle implements Polygon {
     public Vector getNormalVector(Point p) {
         return this.normalVec;
     }
+
+	public Ray getNewRay(Ray r) {
+		return r;
+	}
+
+	public void scale(double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void rotate(double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
+	}
 }

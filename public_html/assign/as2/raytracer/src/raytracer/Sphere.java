@@ -118,4 +118,16 @@ public class Sphere implements Polygon{
 		double t1 = (numeratorTerm1 - numeratorTerm2)/dDotd;
 		return Math.min(t0, t1);
 	}
+
+	public Ray getNewRay(Ray r) {
+		return r;
+	}
+
+	public void scale(double x, double y, double z) {
+		radius = radius + x;
+		
+	}
+
+	public void rotate(double x, double y, double z) {
+	}
 }

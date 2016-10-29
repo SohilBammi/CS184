@@ -15,7 +15,8 @@ public class Ellipse implements Polygon{
     final Vector KS_DEFAULT = new Vector(0.5, 0.5, 0.5);
     final double KR_DEFAULT = 1;
     final double P_DEFAULT = 10;
-    Double[][] transformMatrix;
+    double[][] transformMatrix;
+    double[][] transformMatrixInv;
     boolean isTransformed;
     
     
@@ -92,7 +93,7 @@ public class Ellipse implements Polygon{
     }
 
     public Vector getNormalVector(Point p) {
-        Double[][] transformMatrixInv = transformationMatrixInverse(transformMatrix);
+        double[][] transformMatrixInv = transformationMatrixInverse(transformMatrix);
         double unitSphereX = p.x * transformMatrixInv[0][0] + p.y *transformMatrixInv[0][1] +p.z * transformMatrixInv[0][2] + transformMatrixInv[0][3];
         double unitSphereY = p.x * transformMatrixInv[1][0] + p.y *transformMatrixInv[1][1] +p.z * transformMatrixInv[1][2] + transformMatrixInv[1][3];
         double unitSphereZ = p.x * transformMatrixInv[2][0] + p.y *transformMatrixInv[2][1] +p.z * transformMatrixInv[2][2] + transformMatrixInv[2][3];
@@ -104,7 +105,7 @@ public class Ellipse implements Polygon{
     }
     
     public void translate(double x, double y, double z){
-        Double[][] tMatrix = {  {1.0, 0.0, 0.0, x  },
+        double[][] tMatrix = {  {1.0, 0.0, 0.0, x  },
                                 {0.0, 1.0, 0.0, y  },
                                 {0.0, 0.0, 1.0, z  },
                                 {0.0, 0.0, 0.0, 1.0}    };
@@ -112,7 +113,7 @@ public class Ellipse implements Polygon{
     }
     
     public void scale(double x, double y, double z){
-        Double[][] sMatrix = {  {x, 0.0, 0.0, 0.0  },
+        double[][] sMatrix = {  {x, 0.0, 0.0, 0.0  },
                                 {0.0, y, 0.0, 0.0  },
                                 {0.0, 0.0, z, 0.0  },
                                 {0.0, 0.0, 0.0, 1.0}    };
@@ -127,33 +128,33 @@ public class Ellipse implements Polygon{
         double cosz = Math.cos(z);
         double sinz = Math.sin(z);
         
-        Double[][] rxMatrix = { {1.0,  0.0,   0.0, 0.0},
+        double[][] rxMatrix = { {1.0,  0.0,   0.0, 0.0},
                                 {0.0, cosx, -sinx, 0.0},
                                 {0.0, sinx,  cosx, 0.0},
                                 {0.0,  0.0,   0.0, 1.0}    };
         
-        Double[][] ryMatrix = { { cosy, 0.0, siny, 0.0},
+        double[][] ryMatrix = { { cosy, 0.0, siny, 0.0},
                                 {  0.0, 1.0,  0.0, 0.0},
                                 {-siny, 0.0, cosy, 0.0},
                                 {  0.0, 0.0,  0.0, 1.0}    };
         
-        Double[][] rzMatrix = { {cosz, -sinz, 0.0, 0.0},
+        double[][] rzMatrix = { {cosz, -sinz, 0.0, 0.0},
                                 {sinz,  cosz, 0.0, 0.0},
                                 { 0.0,   0.0, 1.0, 0.0},
                                 { 0.0,   0.0, 0.0, 1.0}    };
-        Double[][] rxyMatrix = matrixMultiply(rxMatrix, ryMatrix);
-        Double[][] rxyzMatrix = matrixMultiply(rxyMatrix, rzMatrix);
+        double[][] rxyMatrix = matrixMultiply(rxMatrix, ryMatrix);
+        double[][] rxyzMatrix = matrixMultiply(rxyMatrix, rzMatrix);
         transform(rxyzMatrix);
     }
     
     
-    private Double[][] matrixMultiply(Double[][] m1, Double[][] m2){
+    private double[][] matrixMultiply(double[][] m1, double[][] m2){
         int m = m1.length;
         int n = m1[0].length;
         int p = m2.length;
         int q = m2[0].length;
         
-        Double[][] ret = new Double[m1.length][m1.length];
+        double[][] ret = new double[m1.length][m1.length];
         double sum = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < q; j++) {
@@ -167,28 +168,22 @@ public class Ellipse implements Polygon{
         return ret;
     }
     
-    private Double[][] getIdentityMatrix(){
-        Double[][] ret = {  {1.0, 0.0, 0.0, 0.0},
+    private double[][] getIdentityMatrix(){
+        double[][] ret = {  {1.0, 0.0, 0.0, 0.0},
                             {0.0, 1.0, 0.0, 0.0},
                             {0.0, 0.0, 1.0, 0.0},
                             {0.0, 0.0, 0.0, 1.0}    };
         return ret;
     }
     
-    private Double[][] transformationMatrixInverse(Double[][] m){
-        Vector u = new Vector(m[0][0], m[1][0], m[2][0]);
-        Vector v = new Vector(m[0][1], m[1][1], m[2][1]);
-        Vector w = new Vector(m[0][2], m[1][2], m[2][2]);
-        Vector t = new Vector(m[0][3], m[1][3], m[2][3]);
-        
-        Double[][] ret = {  {u.x, u.y, u.z, -u.dotProduct(t)},
-                            {v.x, v.y, v.z, -v.dotProduct(t)},
-                            {w.x, w.y, w.z, -w.dotProduct(t)},
-                            {0.0, 0.0, 0.0, 1.0             }   };
+    private double[][] transformationMatrixInverse(double[][] m){
+        Matrix ma = new Matrix(m, 4, 4);
+        ma = ma.inverse();
+        double[][] ret = ma.getArray();
         return ret;
     }
     
-    private void transform(Double[][] m){
+    private void transform(double[][] m){
         if(isTransformed){
             this.transformMatrix = matrixMultiply(this.transformMatrix, m);
         }
@@ -196,10 +191,10 @@ public class Ellipse implements Polygon{
             this.transformMatrix = m;
             isTransformed = true;
         }
+        this.transformMatrixInv = transformationMatrixInverse(transformMatrix);
     }
     
     private Ray transformRay(Ray r){
-        Double[][] transformMatrixInv = transformationMatrixInverse(transformMatrix);
         double originX = r.origin.x * transformMatrixInv[0][0] + r.origin.y *transformMatrixInv[0][1] +r.origin.z * transformMatrixInv[0][2] + transformMatrixInv[0][3];
         double originY = r.origin.x * transformMatrixInv[1][0] + r.origin.y *transformMatrixInv[1][1] +r.origin.z * transformMatrixInv[1][2] + transformMatrixInv[1][3];
         double originZ = r.origin.x * transformMatrixInv[2][0] + r.origin.y *transformMatrixInv[2][1] +r.origin.z * transformMatrixInv[2][2] + transformMatrixInv[2][3];
@@ -218,10 +213,16 @@ public class Ellipse implements Polygon{
         return s.isIntersection(r);
     }
     
-    
     public double getIntersection(Ray r){
         r = transformRay(r);
         Sphere s = new Sphere();
         return s.getIntersection(r);
-    }    
+    }
+
+	public Ray getNewRay(Ray r) {
+		return transformRay(r);
+	}
+
+    
+    
 }
