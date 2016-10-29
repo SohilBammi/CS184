@@ -1,6 +1,4 @@
-package raytracer.util;
-
-public class Maths {
+package raytracer;public class Maths {
 
    /** sqrt(a^2 + b^2) without under/overflow. **/
 

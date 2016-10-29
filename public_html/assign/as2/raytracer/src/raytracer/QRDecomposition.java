@@ -1,5 +1,4 @@
 package raytracer;
-import raytracer.util.*;
 
 /** QR Decomposition.
 <P>

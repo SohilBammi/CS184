@@ -8,7 +8,6 @@ import java.text.FieldPosition;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.StreamTokenizer;
-import raytracer.util.*;
 
 /**
    Jama = Java Matrix class.
